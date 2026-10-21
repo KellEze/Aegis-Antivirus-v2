@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block title %}Minha área — AEGIS{% endblock %}
+
+{% block content %}
+{% set rotulos = {'geral': 'Visão geral', 'dispositivos': 'Dispositivos', 'historico': 'Histórico', 'compras': 'Compras', 'conta': 'Conta'} %}
+<section class="dash">
+  <div class="wrap dash-grid">
+    <nav class="dash-nav" aria-label="Minha área">
+      {% for a in abas %}
+        <a href="{{ url_for('sistema', aba=a) }}" class="{{ 'on' if a == aba }}">{{ rotulos[a] }}</a>
+      {% endfor %}
+    </nav>
+
+    <div>
+    {% if aba == 'geral' %}
+      <h1>Olá, {{ user.nome.split(' ')[0] }}</h1>
+      <p class="dash-sub">Resumo da sua proteção e da sua conta.</p>
+
+      <div class="stats">
+        <div class="stat"><b>{{ dispositivos | length }} / {{ plano.dispositivos }}</b><span>Dispositivos</span></div>
+        <div class="stat"><b>{{ resumo.n }}</b><span>Verificações</span></div>
+        <div class="stat"><b>{{ '{:,}'.format(resumo.arquivos).replace(',', '.') }}</b><span>Arquivos analisados</span></div>
+        <div class="stat"><b>{{ resumo.ameacas }}</b><span>Ameaças encontradas</span></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Seu plano</h2>
+          <span class="pill {{ 'green' if user.plano != 'essencial' }}">{{ plano.nome }}</span>
+        </div>
+        {% if user.plano == 'essencial' %}
+          <p class="muted">Você está no plano gratuito: 1 dispositivo e verificação manual. Faça upgrade para ter proteção em tempo real e mais dispositivos.</p>
+          <div class="actions">
+            <a class="btn btn-primary btn-sm" href="{{ url_for('comprar', plano='plus') }}" target="_blank" rel="noopener">Assinar Plus</a>
+            <a class="btn btn-ghost btn-sm" href="{{ url_for('comprar', plano='pro') }}" target="_blank" rel="noopener">Assinar Pro</a>
+          </div>
+        {% else %}
+          <p class="muted">Assinatura ativa até <b style="color:var(--text)">{{ user.plano_expira_em | data }}</b>{% if dias is not none %} ({{ dias }} dia{{ 's' if dias != 1 }} restante{{ 's' if dias != 1 }}){% endif %}.</p>
+          <div class="actions">
+            <a class="btn btn-primary btn-sm" href="{{ url_for('comprar', plano=user.plano) }}" target="_blank" rel="noopener">Renovar +30 dias</a>
+            {% if user.plano == 'plus' %}<a class="btn btn-ghost btn-sm" href="{{ url_for('comprar', plano='pro') }}" target="_blank" rel="noopener">Fazer upgrade para Pro</a>{% endif %}
+            <form method="post" action="{{ url_for('cancelar_assinatura') }}" data-confirm="Cancelar a assinatura e voltar ao plano Essencial agora?">
+              <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+              <button class="btn btn-danger btn-sm" type="submit">Cancelar assinatura</button>
+            </form>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h2>Chave de licença</h2></div>
+        <p class="muted">Use esta chave no aplicativo no lugar do e-mail e da senha — útil em computadores compartilhados.</p>
+        <div class="license">
+          <code id="licenca">{{ user.license_key }}</code>
+          <button class="btn btn-ghost btn-sm" type="button" data-copy="licenca">Copiar</button>
+          <form method="post" action="{{ url_for('regenerar_licenca') }}" data-confirm="Gerar uma nova chave? A atual deixará de funcionar.">
+            <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+            <button class="btn btn-ghost btn-sm" type="submit">Gerar nova</button>
+          </form>
+        </div>
+      </div>
+
+      {% if not dispositivos %}
+      <div class="panel">
+        <div class="panel-head"><h2>Próximo passo</h2></div>
+        <p class="muted">Nenhum dispositivo conectado ainda. Baixe o aplicativo, instale e entre com sua conta.</p>
+        <a class="btn btn-primary btn-sm" href="{{ url_for('download') }}">Baixar o aplicativo</a>
+      </div>
+      {% endif %}
+
+    {% elif aba == 'dispositivos' %}
+      <h1>Dispositivos</h1>
+      <p class="dash-sub">O plano {{ plano.nome }} permite {{ plano.dispositivos }} dispositivo{{ 's' if plano.dispositivos > 1 }}.</p>
+      <div class="panel">
+        {% if dispositivos %}
+        <div class="table-wrap"><table>
+          <thead><tr><th>Dispositivo</th><th>Sistema</th><th>Último acesso</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+          {% for d in dispositivos %}
+            <tr>
+              <td>{{ d.nome }}</td><td class="muted">{{ d.sistema or '—' }}</td><td>{{ d.ultimo_acesso | datahora }}</td>
+              <td>{% if loop.index0 >= plano.dispositivos %}<span class="pill pink">Acima do limite</span>{% else %}<span class="pill green">Ativo</span>{% endif %}</td>
+              <td>
+                <form method="post" action="{{ url_for('remover_dispositivo', device_row_id=d.id) }}" data-confirm="Remover este dispositivo? O aplicativo nele precisará entrar de novo.">
+                  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+                  <button class="btn btn-danger btn-sm" type="submit">Remover</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table></div>
+        {% else %}
+          <p class="empty">Nenhum dispositivo conectado. <a href="{{ url_for('download') }}">Baixe o aplicativo</a> e entre com sua conta.</p>
+        {% endif %}
+      </div>
+
+    {% elif aba == 'historico' %}
+      <h1>Histórico</h1>
+      <p class="dash-sub">Verificações enviadas pelo aplicativo{% if plano.historico < 50 %} (últimas {{ plano.historico }} no plano {{ plano.nome }}){% endif %}.</p>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Verificações</h2>
+          {% if plano.exportar %}<a class="btn btn-ghost btn-sm" href="{{ url_for('exportar_historico') }}">Exportar CSV</a>
+          {% else %}<span class="muted" style="font-size:.82rem">Exportação em CSV no plano Pro</span>{% endif %}
+        </div>
+        {% if scans %}
+        <div class="table-wrap"><table>
+          <thead><tr><th>Data</th><th>Tipo</th><th>Dispositivo</th><th>Arquivos</th><th>Ameaças</th><th>Duração</th></tr></thead>
+          <tbody>
+          {% for s in scans %}
+            <tr>
+              <td>{{ s.criado_em | datahora }}</td><td>{{ s.tipo | tipo_scan }}</td><td class="muted">{{ s.dispositivo or '—' }}</td>
+              <td>{{ s.arquivos }}</td>
+              <td>{% if s.ameacas %}<span class="pill pink">{{ s.ameacas }}</span>{% else %}<span class="pill green">0</span>{% endif %}</td>
+              <td class="muted">{{ '%.1f' | format(s.duracao) }} s</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table></div>
+        {% else %}
+          <p class="empty">Nenhuma verificação registrada ainda. Faça uma verificação no aplicativo e ela aparecerá aqui.</p>
+        {% endif %}
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h2>Ameaças recentes</h2></div>
+        {% if deteccoes %}
+        <div class="table-wrap"><table>
+          <thead><tr><th>Data</th><th>Arquivo</th><th>Ameaça</th><th>Ação</th></tr></thead>
+          <tbody>
+          {% for d in deteccoes %}
+            <tr><td>{{ d.criado_em | datahora }}</td><td>{{ d.arquivo }}</td><td>{{ d.ameaca }}</td><td><span class="pill {{ 'green' if d.acao == 'quarentena' else 'amber' }}">{{ d.acao }}</span></td></tr>
+          {% endfor %}
+          </tbody>
+        </table></div>
+        {% else %}
+          <p class="empty">Nenhuma ameaça registrada. Tudo limpo por aqui.</p>
+        {% endif %}
+      </div>
+
+    {% elif aba == 'compras' %}
+      <h1>Compras</h1>
+      <p class="dash-sub">Histórico de assinaturas (pagamentos simulados).</p>
+      <div class="panel">
+        {% if compras %}
+        <div class="table-wrap"><table>
+          <thead><tr><th>Data</th><th>Plano</th><th>Valor</th><th>Pagamento</th><th>Válido até</th><th>Status</th></tr></thead>
+          <tbody>
+          {% for c in compras %}
+            <tr>
+              <td>{{ c.criado_em | datahora }}</td><td>{{ PLANOS[c.plano].nome }}</td><td>{{ c.valor_centavos | brl }}</td>
+              <td class="muted">{{ c.bandeira }} •••• {{ c.cartao_final }}</td><td>{{ c.expira_em | data }}</td>
+              <td><span class="pill green">{{ c.status }}</span></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table></div>
+        {% else %}
+          <p class="empty">Você ainda não fez nenhuma compra. <a href="{{ url_for('index') }}#planos">Ver planos</a></p>
+        {% endif %}
+      </div>
+
+    {% else %}
+      <h1>Conta</h1>
+      <p class="dash-sub">Seus dados e segurança.</p>
+      <div class="panel">
+        <div class="panel-head"><h2>Dados</h2></div>
+        <div class="summary-row"><span class="muted">Nome</span><span>{{ user.nome }}</span></div>
+        <div class="summary-row"><span class="muted">E-mail</span><span>{{ user.email }}</span></div>
+        <div class="summary-row"><span class="muted">Cliente desde</span><span>{{ user.criado_em | data }}</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>Alterar senha</h2></div>
+        <form method="post" action="{{ url_for('alterar_senha') }}" style="max-width:420px">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+          <div class="field"><label for="atual">Senha atual</label><input id="atual" type="password" name="atual" autocomplete="current-password" required></div>
+          <div class="field"><label for="nova">Nova senha</label><input id="nova" type="password" name="nova" autocomplete="new-password" minlength="8" required><div class="hint">Mínimo de 8 caracteres, com letras e números.</div></div>
+          <div class="field"><label for="confirma">Confirmar nova senha</label><input id="confirma" type="password" name="confirma" autocomplete="new-password" required></div>
+          <button class="btn btn-primary btn-sm" type="submit">Salvar nova senha</button>
+        </form>
+      </div>
+    {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

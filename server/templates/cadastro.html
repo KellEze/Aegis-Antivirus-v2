@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Criar conta — AEGIS{% endblock %}
+{% block content %}
+<section class="auth">
+  <div class="card">
+    <h1>Criar sua conta</h1>
+    <p class="sub">
+      {% if plano in ('plus', 'pro') %}Crie sua conta para continuar com o plano {{ PLANOS[plano].nome }}.
+      {% else %}É grátis e leva menos de um minuto.{% endif %}
+    </p>
+    <form method="post" action="{{ url_for('cadastro') }}" novalidate>
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <input type="hidden" name="plano" value="{{ plano }}">
+      <div class="field">
+        <label for="nome">Nome completo</label>
+        <input id="nome" type="text" name="nome" value="{{ form.nome }}" autocomplete="name" maxlength="80" required autofocus>
+      </div>
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" name="email" value="{{ form.email }}" placeholder="voce@email.com" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="senha">Senha</label>
+        <div class="pw-wrap">
+          <input id="senha" type="password" name="senha" autocomplete="new-password" minlength="8" required>
+          <button class="pw-toggle" type="button" data-toggle-password="senha">Mostrar</button>
+        </div>
+        <div class="hint">Mínimo de 8 caracteres, com letras e números.</div>
+      </div>
+      <label class="check">
+        <input type="checkbox" name="aceite" required>
+        <span>Li e aceito os <a href="{{ url_for('termos') }}" target="_blank" rel="noopener">Termos de Uso</a> e a <a href="{{ url_for('privacidade') }}" target="_blank" rel="noopener">Política de Privacidade</a>.</span>
+      </label>
+      <button class="btn btn-primary btn-block" type="submit">Criar conta</button>
+    </form>
+    <p class="alt">Já tem conta? <a href="{{ url_for('login') }}">Entrar</a></p>
+  </div>
+</section>
+{% endblock %}

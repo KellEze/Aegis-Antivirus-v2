@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Assinatura confirmada — AEGIS{% endblock %}
+{% block content %}
+<section class="auth">
+  <div class="card center">
+    <div class="success-icon">✓</div>
+    <h1>Assinatura confirmada!</h1>
+    <p class="sub">Seu plano <b style="color:var(--text)">{{ info.nome }}</b> está ativo até <b style="color:var(--text)">{{ compra.expira_em | data }}</b>.</p>
+    <div class="summary-row"><span class="muted">Pedido</span><span>#{{ compra.id }}</span></div>
+    <div class="summary-row"><span class="muted">Valor (simulado)</span><span>{{ compra.valor_centavos | brl }}</span></div>
+    <div class="summary-row"><span class="muted">Pagamento</span><span>{{ compra.bandeira }} •••• {{ compra.cartao_final }}</span></div>
+    <div class="actions" style="justify-content:center;margin-top:24px">
+      <a class="btn btn-primary" href="{{ url_for('download') }}">Baixar o aplicativo</a>
+      <a class="btn btn-ghost" href="{{ url_for('sistema') }}">Minha área</a>
+    </div>
+    <p class="muted" style="font-size:.82rem;margin:18px 0 0">Você pode fechar esta aba quando quiser.</p>
+  </div>
+</section>
+{% endblock %}

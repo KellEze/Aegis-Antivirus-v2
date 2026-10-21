@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Baixar o aplicativo — AEGIS{% endblock %}
+{% block content %}
+<section class="page">
+  <div class="wrap">
+    <h1>Baixe o aplicativo AEGIS</h1>
+    <p class="lead">O pacote já vem configurado para o seu painel. Depois de abrir, entre com seu e-mail e senha ou com a chave de licença.</p>
+
+    <div class="panel" style="max-width:760px">
+      <div class="panel-head">
+        <h2>AEGIS Desktop 1.0</h2>
+        <span class="pill {{ 'green' if user.plano != 'essencial' }}">Plano {{ plano.nome }}</span>
+      </div>
+      <p class="muted">Inclui a interface gráfica, a versão em linha de comando, scripts para abrir o app e para gerar o executável .exe.</p>
+      <a class="btn btn-primary" href="{{ url_for('download_zip') }}">Baixar aegis-antivirus.zip</a>
+      <p class="muted" style="font-size:.82rem;margin:14px 0 0">Seu plano permite {{ plano.dispositivos }} dispositivo{{ 's' if plano.dispositivos > 1 }}{{ ' e inclui proteção em tempo real' if plano.tempo_real }}.</p>
+    </div>
+
+    <div class="two-col" style="max-width:760px">
+      <div class="panel">
+        <h2>Windows</h2>
+        <ol class="os-steps">
+          <li>Instale o <b>Python 3.9+</b> em python.org (marque “Add Python to PATH”).</li>
+          <li>Extraia o zip e dê dois cliques em <code class="inline">run_windows.bat</code>.</li>
+          <li>Para gerar um .exe: execute <code class="inline">build_exe.bat</code>.</li>
+        </ol>
+      </div>
+      <div class="panel">
+        <h2>Linux / macOS</h2>
+        <ol class="os-steps">
+          <li>Garanta o Python 3.9+ com Tkinter (Linux: <code class="inline">sudo apt install python3-tk</code>).</li>
+          <li>Extraia o zip e execute <code class="inline">./run_linux.sh</code>.</li>
+          <li>Sem interface gráfica? Use <code class="inline">python3 aegis_cli.py --help</code>.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="panel" style="max-width:760px">
+      <div class="panel-head"><h2>ClamAV — detecção de malware real</h2><span class="pill green">Recomendado</span></div>
+      <p class="muted">O AEGIS funciona sozinho, mas a base dele é pequena. O <a href="https://www.clamav.net/downloads" target="_blank" rel="noopener">ClamAV</a> é um antivírus de código aberto com milhões de assinaturas. Instalado, o app o detecta automaticamente e passa a usá-lo.</p>
+      <ol class="os-steps">
+        <li><b>Windows:</b> instale o ClamAV, configure o <code class="inline">freshclam.conf</code> (copie o modelo <code class="inline">.sample</code> e comente a linha <code class="inline">Example</code>) e execute <code class="inline">freshclam.exe</code> para baixar a base.</li>
+        <li><b>Linux (Debian/Ubuntu):</b> <code class="inline">sudo apt install clamav clamav-daemon</code>, depois <code class="inline">sudo freshclam</code> e <code class="inline">sudo systemctl enable --now clamav-daemon</code>.</li>
+        <li><b>macOS:</b> <code class="inline">brew install clamav</code> e configure o freshclam.</li>
+        <li>No app: <b>Conta e ajustes → ClamAV → Detectar novamente</b> e <b>Testar ClamAV</b>.</li>
+      </ol>
+      <p class="muted" style="font-size:.82rem;margin:12px 0 0">Os passos exatos variam conforme a versão: consulte <a href="https://docs.clamav.net/" target="_blank" rel="noopener">docs.clamav.net</a>. Com o <b>clamscan</b>, o ClamAV carrega a base a cada verificação (pode levar de dezenas de segundos a alguns minutos e usar bastante memória). Com o <b>clamd</b> a verificação é rápida e o ClamAV entra também no tempo real.</p>
+    </div>
+
+    <div class="panel" style="max-width:760px">
+      <h2>Sua chave de licença</h2>
+      <div class="license">
+        <code id="licenca">{{ user.license_key }}</code>
+        <button class="btn btn-ghost btn-sm" type="button" data-copy="licenca">Copiar</button>
+      </div>
+    </div>
+
+    <div class="panel" style="max-width:760px">
+      <h2>Testando com segurança</h2>
+      <p class="muted" style="margin:0">No app, abra <b style="color:var(--text)">Painel → Criar arquivos de teste</b> e depois faça uma verificação rápida. O arquivo EICAR é inofensivo, mas é reconhecido por antivírus em geral: se o seu antivírus atual o apagar antes, isso é normal e esperado.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

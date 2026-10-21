@@ -1,0 +1,27 @@
+# Blueprint do Render: cria o serviço automaticamente a partir deste arquivo.
+# Plano "free" = sem custo, MAS o banco SQLite é apagado a cada reinício/soneca.
+# Para manter os dados, use plano pago + disco (veja o bloco comentado abaixo e o README).
+services:
+  - type: web
+    name: aegis-antivirus
+    runtime: python
+    plan: free
+    buildCommand: pip install -r server/requirements.txt
+    startCommand: cd server && python app.py
+    healthCheckPath: /api/health
+    envVars:
+      - key: AEGIS_SECRET_KEY      # assinatura de sessões e tokens do app (gerada pelo Render)
+        generateValue: true
+      - key: AEGIS_HTTPS           # cookies somente em HTTPS
+        value: "1"
+      - key: AEGIS_BEHIND_PROXY    # o Render termina o HTTPS na frente do app
+        value: "1"
+
+    # --- Persistência de dados (exige plano pago). Descomente e troque "plan: free" por "plan: starter":
+    # disk:
+    #   name: aegis-data
+    #   mountPath: /var/data
+    #   sizeGB: 1
+    # e adicione em envVars:
+    #   - key: AEGIS_DB
+    #     value: /var/data/aegis.db

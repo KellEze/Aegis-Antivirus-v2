@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Termos de Uso' if pagina == 'termos' else 'Política de Privacidade' }} — AEGIS{% endblock %}
+{% block content %}
+<section class="page">
+  <div class="wrap legal">
+  {% if pagina == 'termos' %}
+    <h1>Termos de Uso</h1>
+    <p class="lead">Este site e o aplicativo AEGIS são um projeto acadêmico de demonstração.</p>
+    <h2>1. Natureza do serviço</h2>
+    <p>O AEGIS é uma ferramenta educacional que demonstra verificação por assinaturas, análise heurística e quarentena. Ele não substitui um antivírus comercial e não garante a detecção de todas as ameaças.</p>
+    <h2>2. Pagamentos</h2>
+    <p>O checkout é simulado. Nenhum valor é cobrado e nenhum meio de pagamento real é processado.</p>
+    <h2>3. Sua conta</h2>
+    <p>Você é responsável por manter sua senha e sua chave de licença em sigilo. Cada plano limita o número de dispositivos conectados.</p>
+    <h2>4. Uso adequado</h2>
+    <p>Utilize o aplicativo apenas em computadores sobre os quais você tem autorização. Arquivos movidos para a quarentena podem ser restaurados pelo próprio aplicativo.</p>
+    <h2>5. Alterações</h2>
+    <p>Estes termos podem mudar conforme o projeto evolui.</p>
+  {% else %}
+    <h1>Política de Privacidade</h1>
+    <p class="lead">Coletamos apenas o necessário para o funcionamento da conta e do painel.</p>
+    <h2>Dados da conta</h2>
+    <p>Nome, e-mail, senha (armazenada somente como hash) e a chave de licença.</p>
+    <h2>Dados de pagamento</h2>
+    <p>Número completo do cartão, validade e CVV nunca são armazenados. Guardamos apenas a bandeira e os quatro últimos dígitos para exibir no histórico de compras.</p>
+    <h2>Dados do aplicativo</h2>
+    <p>Para montar seu painel, o app envia: nome e sistema do dispositivo, tipo e duração das verificações, quantidade de arquivos e ameaças, e, para cada detecção, apenas o nome do arquivo (nunca o caminho nem o conteúdo), o nome da ameaça e a ação tomada.</p>
+    <h2>Cookies</h2>
+    <p>Usamos somente um cookie de sessão necessário para manter você conectado.</p>
+    <h2>Seus direitos</h2>
+    <p>Você pode alterar sua senha, remover dispositivos e regenerar sua licença a qualquer momento na sua área.</p>
+  {% endif %}
+  </div>
+</section>
+{% endblock %}

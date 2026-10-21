@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>Verifique, isole e acompanhe cada ameaça <span class="accent">em um só lugar.</span></h1>
+      <p class="lede">O AEGIS une assinaturas atualizadas, análise heurística e quarentena segura em um aplicativo leve — com um painel online para acompanhar seus dispositivos e verificações.</p>
+      <div class="hero-ctas">
+        {% if user %}
+          <a class="btn btn-primary" href="{{ url_for('download') }}">Baixar o aplicativo</a>
+          <a class="btn btn-ghost" href="{{ url_for('sistema') }}">Ir para minha área</a>
+        {% else %}
+          <a class="btn btn-primary" href="{{ url_for('cadastro', plano='essencial') }}">Começar grátis</a>
+          <a class="btn btn-ghost" href="#como-funciona">Ver como funciona</a>
+        {% endif %}
+      </div>
+      <div class="chips">
+        <span class="chip"><b>SHA-256</b> + padrões</span>
+        <span class="chip"><b>Heurística</b> de comportamento</span>
+        <span class="chip"><b>ClamAV</b> integrado (opcional)</span>
+        <span class="chip"><b>Quarentena</b> reversível</span>
+        <span class="chip"><b>Tempo real</b> no Plus e Pro</span>
+      </div>
+    </div>
+
+    <div class="appmock" aria-hidden="true">
+      <div class="appmock-bar"><i></i><i></i><i></i><span>AEGIS — Painel</span></div>
+      <div class="appmock-body">
+        <div class="appmock-side">
+          <div class="on">Painel</div><div>Verificar</div><div>Quarentena</div><div>Proteção</div><div>Conta</div>
+        </div>
+        <div class="appmock-main">
+          <div class="status-card">
+            <div class="shield">✓</div>
+            <div><strong>Seu computador está protegido</strong><span>Assinaturas na versão mais recente</span></div>
+          </div>
+          <div class="mini-list">
+            <div class="mini-row"><span>Última verificação</span><span class="good">Hoje, 09:41</span></div>
+            <div class="mini-row"><span>Arquivos analisados</span><span>12.480</span></div>
+            <div class="mini-row"><span>Em quarentena</span><span class="bad">1 item</span></div>
+            <div class="mini-row"><span>Proteção em tempo real</span><span class="good">Ativa</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="como-funciona">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Como funciona</div>
+      <h2>Do cadastro à primeira verificação em minutos</h2>
+      <p>Sem configuração complicada: crie a conta, instale e deixe o AEGIS cuidar do resto.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><h3>Crie sua conta</h3><p>O cadastro é gratuito e já gera sua chave de licença pessoal no painel online.</p></div>
+      <div class="step"><h3>Baixe o aplicativo</h3><p>O download já vem configurado para o seu painel. Entre com e-mail e senha ou com a chave de licença.</p></div>
+      <div class="step"><h3>Verifique e acompanhe</h3><p>Faça verificações rápidas ou personalizadas e veja o histórico, as ameaças e os dispositivos no site.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="funcionalidades">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Funcionalidades</div>
+      <h2>Proteção em camadas, cada uma com um papel</h2>
+      <p>Tudo o que está descrito aqui está no aplicativo — sem promessas vazias.</p>
+    </div>
+    <div class="features">
+      <article class="feature">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
+        <h3>Verificação rápida e personalizada</h3>
+        <p>Analise Downloads, Desktop e arquivos temporários em um clique, ou escolha qualquer pasta do computador.</p>
+      </article>
+      <article class="feature">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/><circle cx="19" cy="17" r="2"/></svg>
+        <h3>Assinaturas + ClamAV</h3>
+        <p>Compara hashes e padrões de bytes com a base do AEGIS, atualizável pelo app. Com o ClamAV instalado, soma as assinaturas dele à verificação.</p>
+      </article>
+      <article class="feature">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
+        <h3>Análise heurística</h3>
+        <p>Pontua sinais suspeitos: dupla extensão enganosa, executáveis disfarçados, scripts ofuscados e outros comportamentos.</p>
+      </article>
+      <article class="feature">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+        <h3>Quarentena reversível</h3>
+        <p>Ameaças são isoladas e codificadas para não rodarem. Se for um falso positivo, restaure com um clique.</p>
+      </article>
+      <article class="feature">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 5-3.2 8-7 9-3.8-1-7-4-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+        <h3>Proteção em tempo real</h3>
+        <p>Nos planos Plus e Pro, as pastas monitoradas são verificadas assim que um arquivo novo termina de chegar.</p>
+      </article>
+      <article class="feature">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+        <h3>Painel online</h3>
+        <p>Veja o histórico de verificações, as ameaças encontradas, sua licença e os dispositivos conectados à conta.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="demonstracao">
+  <div class="wrap demo-grid">
+    <div class="section-head">
+      <div class="kicker">Demonstração</div>
+      <h2>Veja uma verificação acontecendo</h2>
+      <p>Esta é uma simulação ilustrativa do que o aplicativo mostra durante uma verificação.</p>
+      <div class="callout"><b>Quer testar de verdade, com segurança?</b> O aplicativo cria o arquivo de teste padrão EICAR — inofensivo, usado no mundo todo para validar antivírus — e você vê o AEGIS detectá-lo e isolá-lo.</div>
+    </div>
+
+    <div class="demo-panel" id="demo">
+      <div class="demo-top">
+        <div class="demo-status">
+          <div class="dot"></div>
+          <div><strong data-demo-title>Pronto para verificar</strong><span data-demo-sub>Clique para iniciar a simulação</span></div>
+        </div>
+        <button class="btn btn-ghost btn-sm" type="button" data-demo-start>Iniciar simulação</button>
+      </div>
+      <div class="progress"><div></div></div>
+      <div class="demo-list">
+        <div class="demo-row" data-clean="1.842 arquivos · limpos"><span class="name">Arquivos do sistema</span><span class="state">aguardando</span></div>
+        <div class="demo-row" data-clean="236 arquivos · limpos"><span class="name">Documentos</span><span class="state">aguardando</span></div>
+        <div class="demo-row" data-threat="EICAR-Test-File isolado"><span class="name">Downloads</span><span class="state">aguardando</span></div>
+        <div class="demo-row" data-clean="58 arquivos · limpos"><span class="name">Área de trabalho</span><span class="state">aguardando</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="planos">
+  <div class="wrap">
+    <div class="section-head center">
+      <div class="kicker">Planos</div>
+      <h2>Escolha o nível de proteção</h2>
+      <p>Comece de graça e faça upgrade quando precisar de mais dispositivos ou de proteção em tempo real.</p>
+    </div>
+
+    <div class="plans">
+      {% for chave, p in PLANOS.items() %}
+      <article class="plan {{ 'featured' if chave == 'plus' }}">
+        {% if chave == 'plus' %}<span class="badge">Mais escolhido</span>{% endif %}
+        <h3>{{ p.nome }}</h3>
+        <p class="resumo">{{ p.resumo }}</p>
+        <div class="price">{% if p.preco == 0 %}Grátis{% else %}{{ p.preco | brl }}<small> /mês</small>{% endif %}</div>
+        <ul>{% for d in p.destaques %}<li>{{ d }}</li>{% endfor %}</ul>
+
+        {% if chave == 'essencial' %}
+          {% if user %}
+            <a class="btn btn-ghost btn-block" href="{{ url_for('download') }}">Baixar o app</a>
+          {% else %}
+            <a class="btn btn-ghost btn-block" href="{{ url_for('cadastro', plano='essencial') }}">Começar grátis</a>
+          {% endif %}
+        {% else %}
+          {% if user %}
+            {% set ordem = ['essencial', 'plus', 'pro'] %}
+            {% if ordem.index(user.plano) > ordem.index(chave) %}
+              <span class="btn btn-ghost btn-block" aria-disabled="true" style="opacity:.55;cursor:default">Você já tem um plano superior</span>
+            {% else %}
+              <a class="btn {{ 'btn-primary' if chave == 'plus' else 'btn-ghost' }} btn-block" href="{{ url_for('comprar', plano=chave) }}" target="_blank" rel="noopener">{{ 'Renovar ' if user.plano == chave else 'Assinar ' }}{{ p.nome }}</a>
+            {% endif %}
+          {% else %}
+            <a class="btn {{ 'btn-primary' if chave == 'plus' else 'btn-ghost' }} btn-block" href="{{ url_for('cadastro', plano=chave) }}">Assinar {{ p.nome }}</a>
+          {% endif %}
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>
+
+    <div class="table-wrap">
+      <table class="compare">
+        <thead><tr><th>Compare os planos</th>{% for p in PLANOS.values() %}<th>{{ p.nome }}</th>{% endfor %}</tr></thead>
+        <tbody>
+          <tr><td>Dispositivos</td>{% for p in PLANOS.values() %}<td>{{ p.dispositivos }}</td>{% endfor %}</tr>
+          <tr><td>Verificação rápida e personalizada</td>{% for p in PLANOS.values() %}<td class="yes">✓</td>{% endfor %}</tr>
+          <tr><td>Quarentena reversível</td>{% for p in PLANOS.values() %}<td class="yes">✓</td>{% endfor %}</tr>
+          <tr><td>Atualização de assinaturas</td>{% for p in PLANOS.values() %}<td class="yes">✓</td>{% endfor %}</tr>
+          <tr><td>Proteção em tempo real</td>{% for p in PLANOS.values() %}<td class="{{ 'yes' if p.tempo_real else 'no' }}">{{ '✓' if p.tempo_real else '—' }}</td>{% endfor %}</tr>
+          <tr><td>Histórico no painel online</td>{% for p in PLANOS.values() %}<td>{{ 'Últimas ' ~ p.historico if p.historico < 50 else 'Até ' ~ p.historico }}</td>{% endfor %}</tr>
+          <tr><td>Exportar histórico (CSV)</td>{% for p in PLANOS.values() %}<td class="{{ 'yes' if p.exportar else 'no' }}">{{ '✓' if p.exportar else '—' }}</td>{% endfor %}</tr>
+          <tr><td>Suporte</td>{% for p in PLANOS.values() %}<td>{{ p.suporte }}</td>{% endfor %}</tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="section-head center">
+      <div class="kicker">Perguntas frequentes</div>
+      <h2>Antes de começar</h2>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>Como o AEGIS detecta ameaças?</summary>
+        <p>Em camadas: comparando o hash SHA-256 do arquivo com a base de assinaturas, procurando padrões de bytes conhecidos no conteúdo e aplicando uma análise heurística que soma pontos para sinais suspeitos. Se o ClamAV estiver instalado, ele também analisa os arquivos. Pontuação alta vira “malicioso”; os casos intermediários aparecem como “suspeitos” para você decidir.</p>
+      </details>
+      <details>
+        <summary>O AEGIS usa o ClamAV?</summary>
+        <p>De forma opcional. Se o ClamAV estiver instalado, o aplicativo o encontra sozinho (daemon clamd ou clamscan) e passa a usar as assinaturas dele junto com o motor próprio. Sem o ClamAV, o AEGIS continua funcionando só com o motor próprio, que é bem mais limitado. A proteção em tempo real usa o ClamAV apenas no modo daemon (clamd).</p>
+      </details>
+      <details>
+        <summary>Preciso estar conectado à internet?</summary>
+        <p>Para entrar na conta e atualizar as assinaturas, sim. As verificações em si rodam no seu computador e funcionam offline com as assinaturas já baixadas.</p>
+      </details>
+      <details>
+        <summary>Como posso testar sem risco?</summary>
+        <p>O aplicativo tem um botão que cria o arquivo de teste EICAR, um padrão inofensivo reconhecido por praticamente todo antivírus. Ao verificar a pasta, o AEGIS deve detectá-lo e movê-lo para a quarentena. Um segundo arquivo de teste só é detectado depois de atualizar as assinaturas, mostrando que a atualização funciona.</p>
+      </details>
+      <details>
+        <summary>Em quais sistemas o aplicativo roda?</summary>
+        <p>Windows, Linux e macOS com Python 3.9 ou superior (o Tkinter vem incluso no instalador oficial do Windows e do macOS). No pacote há scripts para abrir o app e para gerar um executável .exe no Windows.</p>
+      </details>
+      <details>
+        <summary>Posso cancelar quando quiser?</summary>
+        <p>Sim. No painel, em “Minha área”, o botão de cancelar volta sua conta ao plano Essencial na hora.</p>
+      </details>
+      <details>
+        <summary>O pagamento é real?</summary>
+        <p>Não. Este site é um projeto acadêmico: o checkout é simulado, nenhum valor é cobrado e os dados completos do cartão nunca são armazenados — guardamos apenas a bandeira e os quatro últimos dígitos para exibir no histórico.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="border-top:none;padding-top:20px">
+  <div class="wrap">
+    <div class="cta-band">
+      <h2>Comece a proteger seu computador hoje</h2>
+      <p>Crie sua conta gratuita, baixe o aplicativo e faça sua primeira verificação em poucos minutos.</p>
+      {% if user %}
+        <a class="btn btn-primary" href="{{ url_for('download') }}">Baixar o aplicativo</a>
+      {% else %}
+        <a class="btn btn-primary" href="{{ url_for('cadastro', plano='essencial') }}">Criar conta grátis</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Finalizar assinatura {{ info.nome }} — AEGIS{% endblock %}
+{% block content %}
+<section class="checkout">
+  <div class="wrap">
+    <h1 style="font-size:1.8rem;margin-bottom:6px">Finalizar assinatura</h1>
+    <p class="muted" style="margin-bottom:28px">{{ 'Renove' if renovando else 'Ative' }} o plano {{ info.nome }} em poucos passos.</p>
+    <div class="checkout-grid">
+      <div class="card">
+        <h2>Pagamento <span class="card-brand" id="card-brand"></span></h2>
+        <p class="sub">Cartão de crédito</p>
+        <div class="demo-note"><b>Ambiente de demonstração.</b> Nenhum valor é cobrado. Para testar, use o cartão <b>4242 4242 4242 4242</b>, qualquer validade futura e qualquer CVV.</div>
+        <form method="post" action="{{ url_for('comprar', plano=plano) }}" novalidate autocomplete="off">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+          <div class="field"><label for="nome">Nome impresso no cartão</label><input id="nome" type="text" name="nome" value="{{ form.nome }}" autocomplete="cc-name" required></div>
+          <div class="field"><label for="numero">Número do cartão</label><input id="numero" type="text" name="numero" inputmode="numeric" placeholder="0000 0000 0000 0000" autocomplete="cc-number" maxlength="23" required></div>
+          <div class="row-2">
+            <div class="field"><label for="validade">Validade</label><input id="validade" type="text" name="validade" inputmode="numeric" placeholder="MM/AA" autocomplete="cc-exp" maxlength="5" required></div>
+            <div class="field"><label for="cvv">CVV</label><input id="cvv" type="text" name="cvv" inputmode="numeric" placeholder="123" autocomplete="cc-csc" maxlength="4" required></div>
+          </div>
+          <button class="btn btn-primary btn-block" type="submit">Confirmar e pagar {{ info.preco | brl }}</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Resumo do pedido</h2>
+        <p class="sub">Cobrança mensal simulada</p>
+        <div class="summary-row"><span>Plano {{ info.nome }}</span><span>{{ info.preco | brl }}</span></div>
+        <div class="summary-row"><span class="muted">Dispositivos</span><span>{{ info.dispositivos }}</span></div>
+        <div class="summary-row"><span class="muted">Tempo real</span><span>{{ 'Incluído' if info.tempo_real else '—' }}</span></div>
+        <div class="summary-row"><span class="muted">Duração</span><span>30 dias{{ ' (soma ao tempo restante)' if renovando }}</span></div>
+        <div class="summary-row" style="padding-top:18px"><span>Total</span><span class="summary-total">{{ info.preco | brl }}</span></div>
+        <p class="muted" style="font-size:.8rem;margin:14px 0 0">Você pode cancelar a qualquer momento em “Minha área”.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,16 @@
+{
+  "versao": 2,
+  "hashes": {
+    "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f": "EICAR-Test-File"
+  },
+  "padroes": [
+    {
+      "nome": "EICAR-Test-File",
+      "b64": "WDVPIVAlQEFQWzRcUFpYNTQoUF4pN0NDKTd9JEVJQ0FSLVNUQU5EQVJELUFOVElWSVJVUy1URVNULUZJTEUhJEgrSCo="
+    },
+    {
+      "nome": "AEGIS-Test-Signature",
+      "b64": "QUVHSVMtU1RBTkRBUkQtVEVTVC1TSUdOQVRVUkUtNGY5YzFlN2EtTk9ULU1BTFdBUkU="
+    }
+  ]
+}

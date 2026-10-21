@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Entrar — AEGIS{% endblock %}
+{% block content %}
+<section class="auth">
+  <div class="card">
+    <h1>Entrar na sua conta</h1>
+    <p class="sub">Acesse seu painel, sua licença e o download do aplicativo.</p>
+    <form method="post" action="{{ url_for('login') }}" novalidate>
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" name="email" value="{{ email }}" placeholder="voce@email.com" autocomplete="email" required autofocus>
+      </div>
+      <div class="field">
+        <label for="senha">Senha</label>
+        <div class="pw-wrap">
+          <input id="senha" type="password" name="senha" autocomplete="current-password" required>
+          <button class="pw-toggle" type="button" data-toggle-password="senha">Mostrar</button>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+    </form>
+    <p class="alt">Ainda não tem conta? <a href="{{ url_for('cadastro') }}">Criar conta grátis</a></p>
+  </div>
+</section>
+{% endblock %}

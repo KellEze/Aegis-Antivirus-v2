@@ -1,0 +1,2 @@
+# O AEGIS Desktop usa apenas a biblioteca padrao do Python (3.9+).
+# Somente para gerar o executavel: pip install pyinstaller
